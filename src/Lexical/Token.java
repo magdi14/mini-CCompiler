@@ -1,12 +1,16 @@
+package Lexical;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.regex.Pattern;
 
 public class Token implements Comparable<Token> {
     private String type, value;
     private int start;
 
-    Token(String type, String value, int start) {
+    public Token(String type, String value, int start) {
         this.type = type;
         this.value = value;
         this.start = start;
@@ -22,8 +26,9 @@ public class Token implements Comparable<Token> {
         return Integer.compare(this.start, token.start);
     }
 
-    public static ArrayList<Token> tokenize(String sourceCode) throws Exception {
+    public static Queue<Token> tokenize(String sourceCode) throws Exception {
         ArrayList<Token> tokens = new ArrayList<>();
+        Queue<Token> qTokens = new LinkedList<Token>();
         var visitor = new Visitor(sourceCode.length());
         var dictionary = Load.loadClasses();
         for (var i : dictionary) {
@@ -37,6 +42,18 @@ public class Token implements Comparable<Token> {
             }
         }
         Collections.sort(tokens);
-        return tokens;
+        qTokens.addAll(tokens);
+        Save.saveTokens(qTokens);
+
+        return qTokens;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
 }
