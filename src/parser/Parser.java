@@ -69,7 +69,7 @@ public class Parser {
         return null;
     }
 
-    // var_decl2 --> ; | []
+    // var_decl2 --> ; | [];
     private Var_decl2 var_decl2(){
         Token t = tokens.peek();
         if (t != null){
@@ -80,7 +80,10 @@ public class Parser {
                 Token t1 = tokens.peek();
                 if(t1 != null && t1.getValue().equals("]")){
                     tokens.poll();
-                    return new Var_decl2(t, t1);
+                    Token t2 = tokens.peek();
+                    if(t2 != null && t2.getValue().equals(";")){
+                        return new Var_decl2(t, t1, t2);
+                    }
                 }
             }
         }
