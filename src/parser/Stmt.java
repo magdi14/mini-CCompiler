@@ -9,6 +9,7 @@ public class Stmt implements Node{
     If_stmt if_stmt;
     While_stmt while_stmt;
     Return_stmt return_stmt;
+    Break_stmt break_stmt;
 
     public Stmt(Token t1) {
         this.t1 = t1;
@@ -32,6 +33,10 @@ public class Stmt implements Node{
 
     public Stmt(Return_stmt return_stmt) {
         this.return_stmt = return_stmt;
+    }
+
+    public Stmt(Break_stmt break_stmt) {
+        this.break_stmt = break_stmt;
     }
 
     @Override
@@ -64,6 +69,11 @@ public class Stmt implements Node{
         {
             System.out.println(" Return_stmt = ");
             return_stmt.printNode();
+        }
+        else if(break_stmt != null)
+        {
+            System.out.println(" Break_stmt = ");
+            break_stmt.printNode();
         }
 
     }
