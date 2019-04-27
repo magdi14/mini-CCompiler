@@ -10,9 +10,9 @@ public class Expr_stmt implements Node{
         this.t1 = t1;
     }
 
-    public Expr_stmt(Token t1, Expr expr) {
-        this.t1 = t1;
+    public Expr_stmt(Expr expr, Token t1) {
         this.expr = expr;
+        this.t1 = t1;
     }
 
     @Override
