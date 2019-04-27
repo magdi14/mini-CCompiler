@@ -10,7 +10,7 @@ public class Return_stmt2 implements Node {
         this.t1 = t1;
     }
 
-    public Return_stmt2(Token t1, Expr expr) {
+    public Return_stmt2(Expr expr, Token t1) {
         this.t1 = t1;
         this.expr = expr;
     }

@@ -341,6 +341,70 @@ public class Parser {
         return null;
     }
 
+    // if_stmt  --> if ( expr ) stmt if_stmt2
+    private If_stmt if_stmt(){
+        Token t =tokens.peek();
+        if (t != null){
+            tokens.poll();
+            Token t2 = tokens.peek();
+            if (t2 != null && t2.getValue().equals("(")){
+                tokens.poll();
+                Expr expr = expr();
+                Token t3 = tokens.peek();
+                if (t3 != null && t3.getValue().equals(")")){
+                    Stmt stmt = stmt();
+                    If_stmt2 if_stmt2 = if_stmt2();
+                    return new If_stmt(t, t2, t3, expr, stmt, if_stmt2);
+                }
+            }
+        }
+        return null;
+    }
+
+    // if_stmt2  --> E | else stmt
+    private If_stmt2 if_stmt2(){
+        Token t = tokens.peek();
+        if (t != null && t.getValue().equals("else")){
+            tokens.poll();
+            Stmt stmt = stmt();
+            return new If_stmt2(t, stmt);
+        }
+        return null;
+    }
+
+    // return_stmt --> return return_stmt2
+    private Return_stmt return_stmt(){
+        Token t = tokens.peek();
+        if (t != null){
+            if (t.getValue().equals("return")){
+                Return_stmt2 return_stmt2 = return_stmt2();
+                return new Return_stmt(t, return_stmt2);
+            }
+        }
+        return null;
+    }
+
+    // return_stmt2 --> ; | expr ;
+    private Return_stmt2 return_stmt2(){
+        Token t = tokens.peek();
+        if (t != null){
+            if (t.getValue().equals(";")){
+                tokens.poll();
+                return new Return_stmt2(t);
+            }else{
+                Expr expr = expr();
+                Token t2 = tokens.peek();
+                if (t2 != null && t2.getValue().equals(";")){
+                    tokens.poll();
+                    return new Return_stmt2(expr, t2);
+                }
+            }
+        }
+        return null;
+    }
+
+
+
     public static void main(String[] args) throws FileNotFoundException, Exception {
         Parser p = new Parser("/home/shehabeldeen/materials/compilers/mini-CCompiler/main.c");
         Program root = p.parse();
