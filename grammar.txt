@@ -1,0 +1,44 @@
+program    --> decl_list
+decl_list  --> decl decl_list2
+decl_list2 --> decl decl_list2 | E
+decl       --> type_spec IDENT decl2
+decl2      --> var_decl | fun_decl
+var_decl   --> ; | [] ;
+type_spec  --> void | bool | int | float
+fun_decl   --> ( params ) compound_stmt
+params     --> param_list | void
+param_list --> param param_list2
+param_list2--> , param param_list2 | E
+param      --> type_spec IDENT param2
+param2     --> [] | E
+stmt_list  --> stmt_list2
+stmt_list2 --> stmt stmt_list2 | E
+stmt       --> expr_stmt | compound_stmt | if_stmt | while_stmt | return_stmt | break_stmt
+expr_stmt  --> expr ; | ;
+while_stmt --> while ( expr ) stmt
+compound_stmt --> { local_decls stmt_list }
+local_decls  --> local_decls2
+local_decls2 --> local_decl local_decls2 | E
+local_decl   --> type_spec IDENT local_decl2
+local_decl2  --> [] ; | ;
+if_stmt   --> if ( expr ) stmt if_stmt2
+if_stmt2  --> E | else stmt
+return_stmt  --> return return_stmt2
+return_stmt2 --> ; | expr ;
+expr     --> IDENT expr2 | orexpr
+expr2    --> = orexpr | [ orexpr ] = orexpr
+orexpr   --> andexpr orexpr2
+orexpr2  --> OR andexpr orexpr2 | E
+andexpr  --> comexpr andexpr2
+andexpr2 --> AND comexpr andexpr2 | E
+comexpr  --> asexpr comexpr2
+comexpr2 --> EQUAL asexpr | NOT_EQUAL asexpr | LESS_EQ asexpr | LESSTHAN asexpr | GREAT_EQ asexpr | GREATERTHAN asexpr | E
+asexpr   --> mdmexpr asexpr2
+asexpr2  --> + mdmexpr asexpr2 | - mdmexpr asexpr2 | E
+mdmexpr  --> idexpr mdmexpr2
+mdmexpr2 --> * idexpr mdmexpr2 | / idexpr mdmexpr2 | % idexpr mdmexpr2 | E  
+idexpr   --> IDENT idexpr2 | NOT idexpr | MINUS idexpr | PLUS idexpr | [ expr ] | TRUE | FALSE | INT_LIT | FLAOT_LIT | NEW type_spec [ expr ] 
+idexpr2  --> [ expr ] | ( args ) | DOT size
+arg_list --> expr arg_list2
+arg_list2--> , expr arg_list2 | E
+args     --> arg_list | E                       
