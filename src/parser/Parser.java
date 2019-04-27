@@ -3,13 +3,12 @@ package parser;
 import Lexical.Load;
 import Lexical.Token;
 
-import java.io.FileNotFoundException;
 import java.util.Queue;
 
 public class Parser {
     Queue<Token> tokens;
 
-    public Parser(String fileName) throws FileNotFoundException, Exception {
+    public Parser(String fileName) throws Exception {
         // TODO Auto-generated constructor stub
         String sourceCode = Load.loadRaw(fileName);
         this.tokens = Token.tokenize(sourceCode);
@@ -691,8 +690,8 @@ public class Parser {
     }
 
 
-    public static void main(String[] args) throws FileNotFoundException, Exception {
-        Parser p = new Parser("/home/shehabeldeen/materials/compilers/mini-CCompiler/main.c");
+    public static void main(String[] args) throws Exception {
+        Parser p = new Parser(System.getProperty("user.dir") + "/main.c");
         Program root = p.parse();
         root.printNode();
     }
