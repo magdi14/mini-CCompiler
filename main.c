@@ -1,5 +1,5 @@
-int val=3+5*7;
-int m=3;
+int val;
+int m[];
 string text="int x=1";
 while(val<3&&m>0)
 {
@@ -13,4 +13,5 @@ line comment
 //single line comment
 string x="/*Hello";
 float x=3.4;
-int x3.4;
+int x[2];
+void fun(int x)

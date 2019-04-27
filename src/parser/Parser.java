@@ -15,14 +15,14 @@ public class Parser {
         this.tokens = Token.tokenize(sourceCode);
     }
 
-    private Program parse(){
+    private Program parse() {
         return program();
     }
 
     // program --> decl_list
-    private Program program(){
+    private Program program() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Decl_list declList = decl_list();
             return new Program(declList);
         }
@@ -30,9 +30,9 @@ public class Parser {
     }
 
     // decl_list --> decl decl_list2
-    private Decl_list decl_list(){
+    private Decl_list decl_list() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Decl decl = decl();
             Decl_list2 decl_list2 = decl_list2();
             return new Decl_list(decl, decl_list2);
@@ -41,9 +41,9 @@ public class Parser {
     }
 
     // decl_list2 --> decl decl_list2 | E
-    private Decl_list2 decl_list2(){
+    private Decl_list2 decl_list2() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Decl decl = decl();
             Decl_list2 decl_list2 = decl_list2();
             return new Decl_list2(decl, decl_list2);
@@ -52,15 +52,15 @@ public class Parser {
     }
 
     // decl --> var_decl | fun_decl
-    private Decl decl(){
+    private Decl decl() {
         Var_decl var_decl = var_decl();
         return new Decl(var_decl);
     }
 
     // var_decl --> type_spec ident var_decl2
-    private Var_decl var_decl(){
+    private Var_decl var_decl() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Type_spec typeSpec = type_spec();
             Token id = tokens.poll();
             Var_decl2 varDecl2 = var_decl2();
@@ -70,18 +70,18 @@ public class Parser {
     }
 
     // var_decl2 --> ; | [];
-    private Var_decl2 var_decl2(){
+    private Var_decl2 var_decl2() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             tokens.poll();
-            if (t.getValue().equals(";")){
+            if (t.getValue().equals(";")) {
                 return new Var_decl2(t);
-            }else if(t.getValue().equals("[")){
+            } else if (t.getValue().equals("[")) {
                 Token t1 = tokens.peek();
-                if(t1 != null && t1.getValue().equals("]")){
+                if (t1 != null && t1.getValue().equals("]")) {
                     tokens.poll();
                     Token t2 = tokens.peek();
-                    if(t2 != null && t2.getValue().equals(";")){
+                    if (t2 != null && t2.getValue().equals(";")) {
                         return new Var_decl2(t, t1, t2);
                     }
                 }
@@ -104,18 +104,18 @@ public class Parser {
     }
 
     // fun_decl --> type_spec ident (params) compound_stmt
-    private Fun_decl fun_decl(){
+    private Fun_decl fun_decl() {
         return null;
     }
 
     // params --> param_list | void
     private Params params() {
         Token t = tokens.peek();
-        if (t != null){
-            if (t.getValue().equals("void")){
+        if (t != null) {
+            if (t.getValue().equals("void")) {
                 tokens.poll();
                 return new Params(t);
-            }else {
+            } else {
                 Param_list param_list = param_list();
                 return new Params(param_list);
             }
@@ -180,9 +180,9 @@ public class Parser {
     }
 
     // stmt_list --> stmt_list2
-    private Stmt_list stmt_list(){
+    private Stmt_list stmt_list() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Stmt_list2 stmt_list2 = stmt_list2();
             return new Stmt_list(stmt_list2);
         }
@@ -190,9 +190,9 @@ public class Parser {
     }
 
     // stmt_list2 --> stmt stmt_list2 | E
-    private Stmt_list2 stmt_list2(){
+    private Stmt_list2 stmt_list2() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Stmt stmt = stmt();
             Stmt_list2 stmt_list2 = stmt_list2();
             return new Stmt_list2(stmt, stmt_list2);
@@ -201,40 +201,37 @@ public class Parser {
     }
 
     // stmt --> expr_stmt | compound_stmt | if_stmt | while_stmt | return_stmt | break_stmt
-    private Stmt stmt(){
+    private Stmt stmt() {
         Token t = tokens.peek();
-        if (t.getValue().equals("{")){
-            Compound_stmt compound_stmt = compound_stmt();
-            return new Stmt(compound_stmt);
-        }
-        else if (t.getValue().equals("if")){
-            If_stmt if_stmt = if_stmt();
-            return new Stmt(if_stmt);
-        }
-        else if (t.getValue().equals("while")){
-            While_stmt while_stmt = while_stmt();
-            return new Stmt(while_stmt);
-        }
-        else if (t.getValue().equals("break")){
-            Break_stmt break_stmt = break_stmt();
-            return new Stmt(break_stmt);
-        }
-        else if (t.getValue().equals("return")){
-            Return_stmt return_stmt = return_stmt();
-            return new Stmt(return_stmt);
-        }
-        else{
-            Expr_stmt expr_stmt = expr_stmt();
-            return new Stmt(expr_stmt);
+        if (t != null) {
+            if (t.getValue().equals("{")) {
+                Compound_stmt compound_stmt = compound_stmt();
+                return new Stmt(compound_stmt);
+            } else if (t.getValue().equals("if")) {
+                If_stmt if_stmt = if_stmt();
+                return new Stmt(if_stmt);
+            } else if (t.getValue().equals("while")) {
+                While_stmt while_stmt = while_stmt();
+                return new Stmt(while_stmt);
+            } else if (t.getValue().equals("break")) {
+                Break_stmt break_stmt = break_stmt();
+                return new Stmt(break_stmt);
+            } else if (t.getValue().equals("return")) {
+                Return_stmt return_stmt = return_stmt();
+                return new Stmt(return_stmt);
+            } else {
+                Expr_stmt expr_stmt = expr_stmt();
+                return new Stmt(expr_stmt);
+            }
         }
         return null;
     }
 
     // break_stmt --> break
-    private Break_stmt break_stmt(){
+    private Break_stmt break_stmt() {
         Token t = tokens.peek();
-        if (t != null){
-            if (t.getValue().equals("break")){
+        if (t != null) {
+            if (t.getValue().equals("break")) {
                 tokens.poll();
                 return new Break_stmt(t);
             }
@@ -243,13 +240,13 @@ public class Parser {
     }
 
     // expr_stmt --> expr ; | ;
-    private Expr_stmt expr_stmt(){
+    private Expr_stmt expr_stmt() {
         Token t = tokens.peek();
-        if (t != null){
-            if (t.getValue().equals(";")){
+        if (t != null) {
+            if (t.getValue().equals(";")) {
                 tokens.poll();
                 return new Expr_stmt(t);
-            }else {
+            } else {
                 Expr expr = expr();
                 tokens.poll();
                 return new Expr_stmt(expr, t);
@@ -259,16 +256,16 @@ public class Parser {
     }
 
     // while_stmt --> while ( expr ) stmt
-    private While_stmt while_stmt(){
+    private While_stmt while_stmt() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             tokens.poll();
             Token t2 = tokens.peek();
-            if(t2.getValue().equals("(")){
+            if (t2.getValue().equals("(")) {
                 tokens.poll();
                 Expr expr = expr();
                 Token t3 = tokens.peek();
-                if (t3.getValue().equals(")")){
+                if (t3.getValue().equals(")")) {
                     tokens.poll();
                     Stmt stmt = stmt();
                     return new While_stmt(t, t2, t3, expr, stmt);
@@ -279,14 +276,14 @@ public class Parser {
     }
 
     // compound_stmt --> { local_decls stmt_list }
-    private Compound_stmt compound_stmt(){
+    private Compound_stmt compound_stmt() {
         Token t = tokens.peek();
-        if(t != null){
+        if (t != null) {
             tokens.poll();
             Local_decls local_decls = local_decls();
             Stmt_list stmt_list = stmt_list();
             Token t2 = tokens.peek();
-            if (t2.getValue().equals("}")){
+            if (t2.getValue().equals("}")) {
                 tokens.poll();
                 return new Compound_stmt(t, t2, local_decls, stmt_list);
             }
@@ -295,9 +292,9 @@ public class Parser {
     }
 
     // local_decls  --> local_decls2
-    private Local_decls local_decls(){
+    private Local_decls local_decls() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Local_decls2 local_decls2 = local_decls2();
             return new Local_decls(local_decls2);
         }
@@ -305,9 +302,9 @@ public class Parser {
     }
 
     // local_decls2 --> local_decl local_decls2 | E
-    private Local_decls2 local_decls2(){
+    private Local_decls2 local_decls2() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             Local_decl local_decl = local_decl();
             Local_decls2 local_decls2 = local_decls2();
             return new Local_decls2(local_decl, local_decls2);
@@ -316,12 +313,12 @@ public class Parser {
     }
 
     // local_decl --> type_spec IDENT local_decl2
-    private Local_decl local_decl(){
-        Token t =tokens.peek();
-        if (t != null){
+    private Local_decl local_decl() {
+        Token t = tokens.peek();
+        if (t != null) {
             Type_spec type_spec = type_spec();
             Token id = tokens.peek();
-            if (id.getType().equals("ID")){
+            if (id.getType().equals("ID")) {
                 tokens.poll();
                 Local_decl2 local_decl2 = local_decl2();
                 return new Local_decl(type_spec, id, local_decl2);
@@ -331,22 +328,22 @@ public class Parser {
     }
 
     // local_decl2  --> [] ; | ;
-    private Local_decl2 local_decl2(){
+    private Local_decl2 local_decl2() {
         Token t = tokens.peek();
-        if (t != null){
+        if (t != null) {
             tokens.poll();
-            if (t.getValue().equals("[")){
+            if (t.getValue().equals("[")) {
                 Token t2 = tokens.peek();
-                if (t2 != null && t2.getValue().equals("]")){
+                if (t2 != null && t2.getValue().equals("]")) {
                     tokens.poll();
                     Token t3 = tokens.peek();
-                    if (t3 != null && t3.getValue().equals(";")){
+                    if (t3 != null && t3.getValue().equals(";")) {
                         tokens.poll();
                         return new Local_decl2(t, t2, t3);
                     }
 
                 }
-            }else if (t.getValue().equals(";")){
+            } else if (t.getValue().equals(";")) {
                 return new Local_decl2(t);
             }
         }
@@ -354,16 +351,16 @@ public class Parser {
     }
 
     // if_stmt  --> if ( expr ) stmt if_stmt2
-    private If_stmt if_stmt(){
-        Token t =tokens.peek();
-        if (t != null){
+    private If_stmt if_stmt() {
+        Token t = tokens.peek();
+        if (t != null) {
             tokens.poll();
             Token t2 = tokens.peek();
-            if (t2 != null && t2.getValue().equals("(")){
+            if (t2 != null && t2.getValue().equals("(")) {
                 tokens.poll();
                 Expr expr = expr();
                 Token t3 = tokens.peek();
-                if (t3 != null && t3.getValue().equals(")")){
+                if (t3 != null && t3.getValue().equals(")")) {
                     Stmt stmt = stmt();
                     If_stmt2 if_stmt2 = if_stmt2();
                     return new If_stmt(t, t2, t3, expr, stmt, if_stmt2);
@@ -374,9 +371,9 @@ public class Parser {
     }
 
     // if_stmt2  --> E | else stmt
-    private If_stmt2 if_stmt2(){
+    private If_stmt2 if_stmt2() {
         Token t = tokens.peek();
-        if (t != null && t.getValue().equals("else")){
+        if (t != null && t.getValue().equals("else")) {
             tokens.poll();
             Stmt stmt = stmt();
             return new If_stmt2(t, stmt);
@@ -385,10 +382,10 @@ public class Parser {
     }
 
     // return_stmt --> return return_stmt2
-    private Return_stmt return_stmt(){
+    private Return_stmt return_stmt() {
         Token t = tokens.peek();
-        if (t != null){
-            if (t.getValue().equals("return")){
+        if (t != null) {
+            if (t.getValue().equals("return")) {
                 Return_stmt2 return_stmt2 = return_stmt2();
                 return new Return_stmt(t, return_stmt2);
             }
@@ -397,16 +394,16 @@ public class Parser {
     }
 
     // return_stmt2 --> ; | expr ;
-    private Return_stmt2 return_stmt2(){
+    private Return_stmt2 return_stmt2() {
         Token t = tokens.peek();
-        if (t != null){
-            if (t.getValue().equals(";")){
+        if (t != null) {
+            if (t.getValue().equals(";")) {
                 tokens.poll();
                 return new Return_stmt2(t);
-            }else{
+            } else {
                 Expr expr = expr();
                 Token t2 = tokens.peek();
-                if (t2 != null && t2.getValue().equals(";")){
+                if (t2 != null && t2.getValue().equals(";")) {
                     tokens.poll();
                     return new Return_stmt2(expr, t2);
                 }
@@ -416,16 +413,15 @@ public class Parser {
     }
 
     //expr     --> IDENT expr2 | orexpr
-    private Expr expr () {
+    private Expr expr() {
         Token t = tokens.peek();
-        if (t!=null) {
-            if(t.getType().equals("ID")) {
+        if (t != null) {
+            if (t.getType().equals("ID")) {
                 tokens.poll();
                 Expr2 expr2 = expr2();
-                return new Expr(t,expr2);
-            }
-            else {
-                ORexpr oRexpr= orexpr();
+                return new Expr(t, expr2);
+            } else {
+                ORexpr oRexpr = orexpr();
                 return new Expr(oRexpr);
             }
         }
@@ -433,15 +429,14 @@ public class Parser {
     }
 
     //expr2    --> = orexpr | [ orexpr ] = orexpr
-    private Expr2 expr2 () {
+    private Expr2 expr2() {
         Token t = tokens.peek();
-        if (t!=null){
+        if (t != null) {
             tokens.poll();
             if (t.getValue().equals("=")) {
                 ORexpr oRexpr = orexpr();
-                return new Expr2(t,oRexpr);
-            }
-            else if (t.getValue().equals("[")) {
+                return new Expr2(t, oRexpr);
+            } else if (t.getValue().equals("[")) {
                 ORexpr oRexpr = orexpr();
                 Token t2 = tokens.peek();
                 if (t2.getValue().equals("]")) {
@@ -450,7 +445,7 @@ public class Parser {
                     if (t3.getValue().equals("=")) {
                         tokens.poll();
                         ORexpr oRexpr1 = orexpr();
-                        return new Expr2(t,t2,t3,oRexpr,oRexpr1);
+                        return new Expr2(t, t2, t3, oRexpr, oRexpr1);
                     }
                 }
             }
@@ -459,50 +454,50 @@ public class Parser {
     }
 
     //orexpr   --> andexpr orexpr2
-    private ORexpr orexpr () {
+    private ORexpr orexpr() {
         Token t = tokens.peek();
-        if (t!=null) {
+        if (t != null) {
             ANDexpr anDexpr = andexpr();
             ORexpr2 oRexpr2 = orexpr2();
-            return new ORexpr(anDexpr,oRexpr2);
+            return new ORexpr(anDexpr, oRexpr2);
         }
         return null;
     }
 
     //orexpr2  --> OR andexpr orexpr2 | E
-    private ORexpr2 orexpr2 () {
+    private ORexpr2 orexpr2() {
         Token t = tokens.peek();
-        if (t!=null) {
+        if (t != null) {
             tokens.poll();
-            if(t.getType().equals("OR")) {
+            if (t.getType().equals("OR")) {
                 ANDexpr anDexpr = andexpr();
                 ORexpr2 oRexpr2 = orexpr2();
-                return new ORexpr2(t,anDexpr,oRexpr2);
+                return new ORexpr2(t, anDexpr, oRexpr2);
             }
         }
         return null;
     }
 
     //andexpr  --> comexpr andexpr2
-    private ANDexpr andexpr () {
+    private ANDexpr andexpr() {
         Token t = tokens.peek();
-        if (t!=null) {
+        if (t != null) {
             COMexpr coMexpr = comexpr();
             ANDexpr2 anDexpr2 = andexpr2();
-            return new ANDexpr(coMexpr,anDexpr2);
+            return new ANDexpr(coMexpr, anDexpr2);
         }
         return null;
     }
 
     //andexpr2 --> AND comexpr andexpr2 | E
-    private ANDexpr2 andexpr2 () {
+    private ANDexpr2 andexpr2() {
         Token t = tokens.peek();
-        if ( t!= null) {
+        if (t != null) {
             tokens.poll();
-            if(t.getType().equals("AND")) {
+            if (t.getType().equals("AND")) {
                 COMexpr coMexpr = comexpr();
                 ANDexpr2 anDexpr2 = andexpr2();
-                return new ANDexpr2(t,coMexpr,anDexpr2);
+                return new ANDexpr2(t, coMexpr, anDexpr2);
             }
         }
         return null;
@@ -511,10 +506,10 @@ public class Parser {
     //comexpr  --> asexpr comexpr2
     private COMexpr comexpr() {
         Token t = tokens.peek();
-        if ( t!=null){
+        if (t != null) {
             ASexpr aSexpr = asexpr();
             COMexpr2 coMexpr2 = comexpr2();
-            return new COMexpr(aSexpr,coMexpr2);
+            return new COMexpr(aSexpr, coMexpr2);
         }
         return null;
     }
@@ -523,11 +518,11 @@ public class Parser {
     //             LESSTHAN asexpr | GREAT_EQ asexpr | GREATERTHAN asexpr | E
     private COMexpr2 comexpr2() {
         Token t = tokens.peek();
-        if(t!=null) {
+        if (t != null) {
             tokens.poll();
-            if (t.getType().equals("EQUAL")||t.getType().equals("NOT_EQUAL")||t.getType().equals("LESS_EQ")||t.getType().equals("LESSTHAN")||t.getType().equals("GREAT_EQ")||t.getType().equals("GREATERTHAN")) {
+            if (t.getType().equals("EQUAL") || t.getType().equals("NOT_EQUAL") || t.getType().equals("LESS_EQ") || t.getType().equals("LESSTHAN") || t.getType().equals("GREAT_EQ") || t.getType().equals("GREATERTHAN")) {
                 ASexpr aSexpr = asexpr();
-                return new COMexpr2(t,aSexpr);
+                return new COMexpr2(t, aSexpr);
             }
             return null;
         }
@@ -535,25 +530,25 @@ public class Parser {
     }
 
     //asexpr   --> mdmexpr asexpr2
-    private ASexpr asexpr () {
+    private ASexpr asexpr() {
         Token t = tokens.peek();
-        if(t!=null){
+        if (t != null) {
             MDMexpr mdMexpr = mdmexpr();
             ASexpr2 aSexpr2 = asexpr2();
-            return new ASexpr(mdMexpr,aSexpr2);
+            return new ASexpr(mdMexpr, aSexpr2);
         }
         return null;
     }
 
     //asexpr2  --> + mdmexpr asexpr2 | - mdmexpr asexpr2 | E
     private ASexpr2 asexpr2() {
-        Token t= tokens.peek();
-        if(t!=null) {
+        Token t = tokens.peek();
+        if (t != null) {
             tokens.poll();
-            if(t.getValue().equals("+")||t.getValue().equals("-")) {
+            if (t.getValue().equals("+") || t.getValue().equals("-")) {
                 MDMexpr mdMexpr = mdmexpr();
                 ASexpr2 aSexpr2 = asexpr2();
-                return new ASexpr2(t,mdMexpr,aSexpr2);
+                return new ASexpr2(t, mdMexpr, aSexpr2);
             }
             return null;
         }
@@ -561,25 +556,25 @@ public class Parser {
     }
 
     //mdmexpr  --> idexpr mdmexpr2
-    private MDMexpr mdmexpr () {
+    private MDMexpr mdmexpr() {
         Token t = tokens.peek();
-        if(t!=null) {
+        if (t != null) {
             IDexpr iDexpr = idexpr();
             MDMexpr2 mdMexpr2 = mdmexpr2();
-            return new MDMexpr(iDexpr,mdMexpr2);
+            return new MDMexpr(iDexpr, mdMexpr2);
         }
         return null;
     }
 
     // mdmexpr2 --> * idexpr mdmexpr2 | / idexpr mdmexpr2 | % idexpr mdmexpr2 | E
-    private MDMexpr2 mdmexpr2 () {
+    private MDMexpr2 mdmexpr2() {
         Token t = tokens.peek();
-        if(t!=null) {
+        if (t != null) {
             tokens.poll();
-            if (t.getValue().equals("*")||t.getValue().equals("/")||t.getValue().equals("%")) {
+            if (t.getValue().equals("*") || t.getValue().equals("/") || t.getValue().equals("%")) {
                 IDexpr iDexpr = idexpr();
                 MDMexpr2 mdMexpr2 = mdmexpr2();
-                return new MDMexpr2(t,iDexpr,mdMexpr2);
+                return new MDMexpr2(t, iDexpr, mdMexpr2);
             }
             return null;
         }
@@ -588,39 +583,35 @@ public class Parser {
 
     //idexpr   --> IDENT idexpr2 | NOT idexpr | MINUS idexpr | PLUS idexpr |
     //            [ expr ] | TRUE | FALSE | INT_LIT | FLAOT_LIT | NEW type_spec [ expr ]
-    private IDexpr idexpr(){
+    private IDexpr idexpr() {
         Token t = tokens.peek();
-        if(t!= null) {
+        if (t != null) {
             tokens.poll();
-            if(t.getType().equals("ID")) {
+            if (t.getType().equals("ID")) {
                 IDexpr2 iDexpr2 = idexpr2();
-                return new IDexpr(t,iDexpr2);
-            }
-            else if (t.getType().equals("NOT")||t.getType().equals("MINUS")||t.getType().equals("PLUS")) {
+                return new IDexpr(t, iDexpr2);
+            } else if (t.getType().equals("NOT") || t.getType().equals("MINUS") || t.getType().equals("PLUS")) {
                 IDexpr iDexpr = idexpr();
-                return new IDexpr(t,iDexpr);
-            }
-            else if (t.getValue().equals("[")) {
+                return new IDexpr(t, iDexpr);
+            } else if (t.getValue().equals("[")) {
                 Expr expr = expr();
                 Token t1 = tokens.peek();
-                if(t1!=null && t1.getValue().equals("]")) {
+                if (t1 != null && t1.getValue().equals("]")) {
                     tokens.poll();
-                    return new IDexpr(t,t1,expr);
+                    return new IDexpr(t, t1, expr);
                 }
-            }
-            else if (t.getType().equals("TRUE")||t.getType().equals("FALSE")||t.getType().equals("INT_LITERAL")||t.getType().equals("FLOAT_LITERAL")) {
+            } else if (t.getType().equals("TRUE") || t.getType().equals("FALSE") || t.getType().equals("INT_LITERAL") || t.getType().equals("FLOAT_LITERAL")) {
                 return new IDexpr(t);
-            }
-            else if (t.getType().equals("NEW")) {
+            } else if (t.getType().equals("NEW")) {
                 Type_spec type_spec = type_spec();
                 Token t2 = tokens.peek();
-                if(t2!=null && t2.getValue().equals("[")) {
+                if (t2 != null && t2.getValue().equals("[")) {
                     Expr expr = expr();
                     tokens.poll();
                     Token t3 = tokens.peek();
-                    if(t3!=null && t3.getValue().equals("]")) {
+                    if (t3 != null && t3.getValue().equals("]")) {
                         tokens.poll();
-                        return new IDexpr(t,t2,t3,expr,type_spec);
+                        return new IDexpr(t, t2, t3, expr, type_spec);
                     }
                 }
             }
@@ -630,34 +621,35 @@ public class Parser {
     }
 
     // idexpr2  --> [ expr ] | ( args ) | DOT size
-    private  IDexpr2 idexpr2 () {
+    private IDexpr2 idexpr2() {
         Token t = tokens.peek();
         if (t != null) {
             tokens.poll();
-            if(t.getValue().equals("[")) {
+            if (t.getValue().equals("[")) {
                 Expr expr = expr();
                 Token t1 = tokens.peek();
-                if(t1!=null && t1.getValue().equals("]")){
+                if (t1 != null && t1.getValue().equals("]")) {
                     tokens.poll();
-                    return new IDexpr2(t,t1,expr);
+                    return new IDexpr2(t, t1, expr);
                 }
 
             } else if (t.getValue().equals("(")) {
                 Args args = args();
-                Token t1 =tokens.peek();
-                if(t1!=null && t1.getValue().equals(")")) {
+                Token t1 = tokens.peek();
+                if (t1 != null && t1.getValue().equals(")")) {
                     tokens.poll();
-                    return new IDexpr2(t,t1,args);
+                    return new IDexpr2(t, t1, args);
                 }
 
             } else if (t.getValue().equals(".")) {
                 Token t1 = tokens.peek();
-                if (t1!=null && t1.getValue().equals("sizeof")) {
+                if (t1 != null && t1.getValue().equals("sizeof")) {
                     tokens.poll();
-                    return new IDexpr2(t,t1);
+                    return new IDexpr2(t, t1);
                 }
 
-            } return null;
+            }
+            return null;
         }
         return null;
     }
@@ -665,10 +657,10 @@ public class Parser {
     // arg_list --> expr arg_list2
     private Arg_list arg_list() {
         Token t = tokens.peek();
-        if (t != null ) {
+        if (t != null) {
             Expr expr = expr();
             Arg_list2 arg_list2 = arg_list2();
-            return new Arg_list(expr,arg_list2);
+            return new Arg_list(expr, arg_list2);
         }
         return null;
     }
@@ -676,12 +668,12 @@ public class Parser {
     // arg_list2 --> , expr arg_list2 | E
     private Arg_list2 arg_list2() {
         Token t = tokens.peek();
-        if(t!= null) {
-            if(t.getValue().equals(",")) {
+        if (t != null) {
+            if (t.getValue().equals(",")) {
                 tokens.poll();
                 Expr expr = expr();
                 Arg_list2 arg_list2 = arg_list2();
-                return new Arg_list2(t,expr,arg_list2);
+                return new Arg_list2(t, expr, arg_list2);
             }
             return null;
         }
@@ -691,13 +683,12 @@ public class Parser {
     // args --> arg_list | E
     private Args args() {
         Token t = tokens.peek();
-        if (t!= null) {
+        if (t != null) {
             Arg_list arg_list = arg_list();
             return new Args(arg_list);
         }
         return null;
     }
-
 
 
     public static void main(String[] args) throws FileNotFoundException, Exception {
