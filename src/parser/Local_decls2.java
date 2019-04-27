@@ -1,7 +1,5 @@
 package parser;
 
-import Lexical.Token;
-
 public class Local_decls2 implements Node{
     Local_decl local_decl;
     Local_decls2 local_decls2;
@@ -16,9 +14,11 @@ public class Local_decls2 implements Node{
         if(local_decl != null)
         {
             System.out.println(" Local_decl = ");
-            local_decl.printNode();
+            if (local_decl != null)
+                local_decl.printNode();
             System.out.println(" Local_decls2 = ");
-            local_decls2.printNode();
+            if (local_decls2 != null)
+                local_decls2.printNode();
         }
         else
             System.out.println("NULL");

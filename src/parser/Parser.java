@@ -210,7 +210,7 @@ public class Parser {
     // stmt_list --> stmt_list2
     private Stmt_list stmt_list() {
         Token t = tokens.peek();
-        if (t != null) {
+        if (t != null && !t.getValue().equals("}")) {
             Stmt_list2 stmt_list2 = stmt_list2();
             return new Stmt_list(stmt_list2);
         }
@@ -315,6 +315,7 @@ public class Parser {
             }
             Local_decls local_decls = local_decls();
             Stmt_list stmt_list = stmt_list();
+            t2 = tokens.peek();
             if (t2.getValue().equals("}")) {
                 tokens.poll();
                 return new Compound_stmt(t, t2, local_decls, stmt_list);
