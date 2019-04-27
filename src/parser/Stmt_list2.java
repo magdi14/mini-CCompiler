@@ -20,5 +20,7 @@ public class Stmt_list2 implements Node{
             System.out.println(" Stmt_list2 = ");
             stmt_list2.printNode();
         }
+        else
+            System.out.println("NULL");
     }
 }
