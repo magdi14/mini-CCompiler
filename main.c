@@ -1,2 +1,3 @@
-int val;
-int m[];
+int m(int x){
+    int y=z;
+}

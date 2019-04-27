@@ -72,7 +72,7 @@ public class Parser {
             if (t.getValue().equals(";") || t.getValue().equals("[")) {
                 Var_decl var_decl = var_decl();
                 return new Decl2(var_decl);
-            } else if (t.getValue().equals(";")) {
+            } else if (t.getValue().equals("(")) {
                 Fun_decl fun_decl = fun_decl();
                 return new Decl2(fun_decl);
             }
@@ -138,8 +138,10 @@ public class Parser {
     private Params params() {
         Token t = tokens.peek();
         if (t != null) {
-            if (t.getValue().equals("void")) {
-                tokens.poll();
+            if (t.getValue().equals("void") || t.getValue().equals(")")) {
+                if (t.getValue().equals("void")) {
+                    tokens.poll();
+                }
                 return new Params(t);
             } else {
                 Param_list param_list = param_list();
@@ -306,9 +308,13 @@ public class Parser {
         Token t = tokens.peek();
         if (t != null) {
             tokens.poll();
+            Token t2 = tokens.peek();
+            if (t2.getValue().equals("}")) {
+                tokens.poll();
+                return new Compound_stmt(t, t2, null, null);
+            }
             Local_decls local_decls = local_decls();
             Stmt_list stmt_list = stmt_list();
-            Token t2 = tokens.peek();
             if (t2.getValue().equals("}")) {
                 tokens.poll();
                 return new Compound_stmt(t, t2, local_decls, stmt_list);
@@ -330,7 +336,7 @@ public class Parser {
     // local_decls2 --> local_decl local_decls2 | E
     private Local_decls2 local_decls2() {
         Token t = tokens.peek();
-        if (t != null) {
+        if (t != null && !t.getValue().equals("}")) {
             Local_decl local_decl = local_decl();
             Local_decls2 local_decls2 = local_decls2();
             return new Local_decls2(local_decl, local_decls2);

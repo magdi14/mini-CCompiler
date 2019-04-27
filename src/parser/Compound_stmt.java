@@ -22,9 +22,11 @@ public class Compound_stmt implements Node{
         {
             System.out.println(t1.getValue());
             System.out.println(" Local_decls = ");
-            local_decls.printNode();
+            if (local_decls != null)
+                local_decls.printNode();
             System.out.println(" Stmt_list = ");
-            stmt_list.printNode();
+            if (stmt_list != null)
+                stmt_list.printNode();
             System.out.println(t2.getValue());
         }
 

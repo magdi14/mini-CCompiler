@@ -27,7 +27,8 @@ public class Fun_decl implements Node {
             params.printNode();
             System.out.println("  " + rb.getValue());
             System.out.println(" compound_stmt = ");
-            compound_stmt.printNode();
+            if (compound_stmt != null)
+                compound_stmt.printNode();
         } else
             System.out.println("null");
     }
