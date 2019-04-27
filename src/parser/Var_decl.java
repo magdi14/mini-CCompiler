@@ -4,24 +4,33 @@ import Lexical.Token;
 
 public class Var_decl implements Node {
 
-    Type_spec type_spec;
-    Token id;
-    Var_decl2 var_decl2;
+    Token ls; // semicolon or left square bracket
+    Token rs; // right square bracket
+    Token sc; // semicolon
 
-    public Var_decl(Type_spec type_spec, Token id, Var_decl2 var_decl2) {
-        this.type_spec = type_spec;
-        this.id = id;
-        this.var_decl2 = var_decl2;
+    public Var_decl(Token ls) {
+        this.ls = ls;
+    }
+
+    public Var_decl(Token ls, Token rs, Token sc) {
+        this.ls = ls;
+        this.rs = rs;
+        this.sc = sc;
     }
 
     @Override
     public void printNode(){
         // TODO Auto-generated method stub
         System.out.println("---------Var_decl-----------");
-        System.out.println("Type_spec = ");
-        if(type_spec!=null) type_spec.printNode() ; else System.out.println("null");
-        System.out.println("IDENT = " + id.getValue());
-        System.out.println("Var_decl2 = ");
-        if(var_decl2!=null) var_decl2.printNode() ; else System.out.println("null");
+        if( ls != null && ls.getValue().equals(";"))
+        {
+            System.out.println("SEMICOLON");
+        }
+        else if (ls != null && ls.getValue().equals("["))
+            System.out.println("LEFT_SQUARE_B");
+        if (rs != null && rs.getValue().equals("]"))
+            System.out.println("RIGHT_SQUARE_B");
+        if (sc != null && sc.getValue().equals(";"))
+            System.out.println("SEMICOLON");
     }
 }

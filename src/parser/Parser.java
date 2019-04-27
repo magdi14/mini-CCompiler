@@ -50,38 +50,52 @@ public class Parser {
         return null;
     }
 
-    // decl --> var_decl | fun_decl
+    // decl --> type_spec IDENT decl2
     private Decl decl() {
-        Var_decl var_decl = var_decl();
-        return new Decl(var_decl);
+        Token t = tokens.peek();
+        if (t != null) {
+            Type_spec type_spec = type_spec();
+            Token id = tokens.peek();
+            if (id != null && id.getType().equals("ID")) {
+                tokens.poll();
+                Decl2 decl2 = decl2();
+                return new Decl(type_spec, id, decl2);
+            }
+        }
+        return null;
+    }
+
+    // decl2 --> var_decl | fun_decl
+    private Decl2 decl2() {
+        Token t = tokens.peek();
+        if (t != null) {
+            if (t.getValue().equals(";") || t.getValue().equals("[")) {
+                Var_decl var_decl = var_decl();
+                return new Decl2(var_decl);
+            } else if (t.getValue().equals(";")) {
+                Fun_decl fun_decl = fun_decl();
+                return new Decl2(fun_decl);
+            }
+        }
+        return null;
     }
 
     // var_decl --> type_spec ident var_decl2
     private Var_decl var_decl() {
         Token t = tokens.peek();
         if (t != null) {
-            Type_spec typeSpec = type_spec();
-            Token id = tokens.poll();
-            Var_decl2 varDecl2 = var_decl2();
-            return new Var_decl(typeSpec, id, varDecl2);
-        }
-        return null;
-    }
-
-    // var_decl2 --> ; | [];
-    private Var_decl2 var_decl2() {
-        Token t = tokens.peek();
-        if (t != null) {
-            tokens.poll();
             if (t.getValue().equals(";")) {
-                return new Var_decl2(t);
+                tokens.poll();
+                return new Var_decl(t);
             } else if (t.getValue().equals("[")) {
-                Token t1 = tokens.peek();
-                if (t1 != null && t1.getValue().equals("]")) {
+                tokens.poll();
+                Token t2 = tokens.peek();
+                if (t2 != null && t2.getValue().equals("]")) {
                     tokens.poll();
-                    Token t2 = tokens.peek();
-                    if (t2 != null && t2.getValue().equals(";")) {
-                        return new Var_decl2(t, t1, t2);
+                    Token t3 = tokens.peek();
+                    if (t3 != null && t3.getValue().equals(";")) {
+                        tokens.poll();
+                        return new Var_decl(t, t2, t3);
                     }
                 }
             }
@@ -104,6 +118,19 @@ public class Parser {
 
     // fun_decl --> type_spec ident (params) compound_stmt
     private Fun_decl fun_decl() {
+        Token t = tokens.peek();
+        if (t != null) {
+            if (t.getValue().equals("(")) {
+                tokens.poll();
+                Params params = params();
+                Token t2 = tokens.peek();
+                if (t2 != null && t2.getValue().equals(")")) {
+                    tokens.poll();
+                    Compound_stmt compound_stmt = compound_stmt();
+                    return new Fun_decl(t, params, t2, compound_stmt);
+                }
+            }
+        }
         return null;
     }
 
