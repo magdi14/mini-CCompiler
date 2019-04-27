@@ -178,6 +178,27 @@ public class Parser {
         return null;
     }
 
+    // stmt_list --> stmt_list2
+    private Stmt_list stmt_list(){
+        Token t = tokens.peek();
+        if (t != null){
+            Stmt_list2 stmt_list2 = stmt_list2();
+            return new Stmt_list(stmt_list2);
+        }
+        return null;
+    }
+
+    // stmt_list2 --> stmt stmt_list2 | E
+    private Stmt_list2 stmt_list2(){
+        Token t = tokens.peek();
+        if (t != null){
+            Stmt stmt = stmt();
+            Stmt_list2 stmt_list2 = stmt_list2();
+        }else
+            return null;
+    }
+
+
 
     public static void main(String[] args) throws FileNotFoundException, Exception {
         Parser p = new Parser("/home/shehabeldeen/materials/compilers/mini-CCompiler/main.c");
