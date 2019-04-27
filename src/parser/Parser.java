@@ -198,6 +198,289 @@ public class Parser {
             return null;
     }
 
+    //expr     --> IDENT expr2 | orexpr
+    private Expr expr () {
+        Token t = tokens.peek();
+        if (t!=null) {
+            if(t.getType().equals("ID")) {
+                tokens.poll();
+                Expr2 expr2 = expr2();
+                return new Expr(t,expr2);
+            }
+            else {
+                ORexpr oRexpr= orexpr();
+                return new Expr(oRexpr);
+            }
+        }
+        return null;
+    }
+
+    //expr2    --> = orexpr | [ orexpr ] = orexpr
+    private Expr2 expr2 () {
+        Token t = tokens.peek();
+        if (t!=null){
+            tokens.poll();
+            if (t.getValue().equals("=")) {
+                ORexpr oRexpr = orexpr();
+                return new Expr2(t,oRexpr);
+            }
+            else if (t.getValue().equals("[")) {
+                ORexpr oRexpr = orexpr();
+                Token t2 = tokens.peek();
+                if (t2.getValue().equals("]")) {
+                    tokens.poll();
+                    Token t3 = tokens.peek();
+                    if (t3.getValue().equals("=")) {
+                        tokens.poll();
+                        ORexpr oRexpr1 = orexpr();
+                        return new Expr2(t,t2,t3,oRexpr,oRexpr1);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    //orexpr   --> andexpr orexpr2
+    private ORexpr orexpr () {
+        Token t = tokens.peek();
+        if (t!=null) {
+            ANDexpr anDexpr = andexpr();
+            ORexpr2 oRexpr2 = orexpr2();
+            return new ORexpr(anDexpr,oRexpr2);
+        }
+        return null;
+    }
+
+    //orexpr2  --> OR andexpr orexpr2 | E
+    private ORexpr2 orexpr2 () {
+        Token t = tokens.peek();
+        if (t!=null) {
+            tokens.poll();
+            if(t.getType().equals("OR")) {
+                ANDexpr anDexpr = andexpr();
+                ORexpr2 oRexpr2 = orexpr2();
+                return new ORexpr2(t,anDexpr,oRexpr2);
+            }
+        }
+        return null;
+    }
+
+    //andexpr  --> comexpr andexpr2
+    private ANDexpr andexpr () {
+        Token t = tokens.peek();
+        if (t!=null) {
+            COMexpr coMexpr = comexpr();
+            ANDexpr2 anDexpr2 = andexpr2();
+            return new ANDexpr(coMexpr,anDexpr2);
+        }
+        return null;
+    }
+
+    //andexpr2 --> AND comexpr andexpr2 | E
+    private ANDexpr2 andexpr2 () {
+        Token t = tokens.peek();
+        if ( t!= null) {
+            tokens.poll();
+            if(t.getType().equals("AND")) {
+                COMexpr coMexpr = comexpr();
+                ANDexpr2 anDexpr2 = andexpr2();
+                return new ANDexpr2(t,coMexpr,anDexpr2);
+            }
+        }
+        return null;
+    }
+
+    //comexpr  --> asexpr comexpr2
+    private COMexpr comexpr() {
+        Token t = tokens.peek();
+        if ( t!=null){
+            ASexpr aSexpr = asexpr();
+            COMexpr2 coMexpr2 = comexpr2();
+            return new COMexpr(aSexpr,coMexpr2);
+        }
+        return null;
+    }
+
+    //comexpr2 --> EQUAL asexpr | NOT_EQUAL asexpr | LESS_EQ asexpr
+    //             LESSTHAN asexpr | GREAT_EQ asexpr | GREATERTHAN asexpr | E
+    private COMexpr2 comexpr2() {
+        Token t = tokens.peek();
+        if(t!=null) {
+            tokens.poll();
+            if (t.getType().equals("EQUAL")||t.getType().equals("NOT_EQUAL")||t.getType().equals("LESS_EQ")||t.getType().equals("LESSTHAN")||t.getType().equals("GREAT_EQ")||t.getType().equals("GREATERTHAN")) {
+                ASexpr aSexpr = asexpr();
+                return new COMexpr2(t,aSexpr);
+            }
+            return null;
+        }
+        return null;
+    }
+
+    //asexpr   --> mdmexpr asexpr2
+    private ASexpr asexpr () {
+        Token t = tokens.peek();
+        if(t!=null){
+            MDMexpr mdMexpr = mdmexpr();
+            ASexpr2 aSexpr2 = asexpr2();
+            return new ASexpr(mdMexpr,aSexpr2);
+        }
+        return null;
+    }
+
+    //asexpr2  --> + mdmexpr asexpr2 | - mdmexpr asexpr2 | E
+    private ASexpr2 asexpr2() {
+        Token t= tokens.peek();
+        if(t!=null) {
+            tokens.poll();
+            if(t.getValue().equals("+")||t.getValue().equals("-")) {
+                MDMexpr mdMexpr = mdmexpr();
+                ASexpr2 aSexpr2 = asexpr2();
+                return new ASexpr2(t,mdMexpr,aSexpr2);
+            }
+            return null;
+        }
+        return null;
+    }
+
+    //mdmexpr  --> idexpr mdmexpr2
+    private MDMexpr mdmexpr () {
+        Token t = tokens.peek();
+        if(t!=null) {
+            IDexpr iDexpr = idexpr();
+            MDMexpr2 mdMexpr2 = mdmexpr2();
+            return new MDMexpr(iDexpr,mdMexpr2);
+        }
+        return null;
+    }
+
+    // mdmexpr2 --> * idexpr mdmexpr2 | / idexpr mdmexpr2 | % idexpr mdmexpr2 | E
+    private MDMexpr2 mdmexpr2 () {
+        Token t = tokens.peek();
+        if(t!=null) {
+            tokens.poll();
+            if (t.getValue().equals("*")||t.getValue().equals("/")||t.getValue().equals("%")) {
+                IDexpr iDexpr = idexpr();
+                MDMexpr2 mdMexpr2 = mdmexpr2();
+                return new MDMexpr2(t,iDexpr,mdMexpr2);
+            }
+            return null;
+        }
+        return null;
+    }
+
+    //idexpr   --> IDENT idexpr2 | NOT idexpr | MINUS idexpr | PLUS idexpr |
+    //            [ expr ] | TRUE | FALSE | INT_LIT | FLAOT_LIT | NEW type_spec [ expr ]
+    private IDexpr idexpr(){
+        Token t = tokens.peek();
+        if(t!= null) {
+            tokens.poll();
+            if(t.getType().equals("ID")) {
+                IDexpr2 iDexpr2 = idexpr2();
+                return new IDexpr(t,iDexpr2);
+            }
+            else if (t.getType().equals("NOT")||t.getType().equals("MINUS")||t.getType().equals("PLUS")) {
+                IDexpr iDexpr = idexpr();
+                return new IDexpr(t,iDexpr);
+            }
+            else if (t.getValue().equals("[")) {
+                Expr expr = expr();
+                Token t1 = tokens.peek();
+                if(t1!=null && t1.getValue().equals("]")) {
+                    tokens.poll();
+                    return new IDexpr(t,t1,expr);
+                }
+            }
+            else if (t.getType().equals("TRUE")||t.getType().equals("FALSE")||t.getType().equals("INT_LITERAL")||t.getType().equals("FLOAT_LITERAL")) {
+                return new IDexpr(t);
+            }
+            else if (t.getType().equals("NEW")) {
+                Type_spec type_spec = type_spec();
+                Token t2 = tokens.peek();
+                if(t2!=null && t2.getValue().equals("[")) {
+                    Expr expr = expr();
+                    tokens.poll();
+                    Token t3 = tokens.peek();
+                    if(t3!=null && t3.getValue().equals("]")) {
+                        tokens.poll();
+                        return new IDexpr(t,t2,t3,expr,type_spec);
+                    }
+                }
+            }
+            return null;
+        }
+        return null;
+    }
+
+    // idexpr2  --> [ expr ] | ( args ) | DOT size
+    private  IDexpr2 idexpr2 () {
+        Token t = tokens.peek();
+        if (t != null) {
+            tokens.poll();
+            if(t.getValue().equals("[")) {
+                Expr expr = expr();
+                Token t1 = tokens.peek();
+                if(t1!=null && t1.getValue().equals("]")){
+                    tokens.poll();
+                    return new IDexpr2(t,t1,expr);
+                }
+
+            } else if (t.getValue().equals("(")) {
+                Args args = args();
+                Token t1 =tokens.peek();
+                if(t1!=null && t1.getValue().equals(")")) {
+                    tokens.poll();
+                    return new IDexpr2(t,t1,args);
+                }
+
+            } else if (t.getValue().equals(".")) {
+                Token t1 = tokens.peek();
+                if (t1!=null && t1.getValue().equals("sizeof")) {
+                    tokens.poll();
+                    return new IDexpr2(t,t1);
+                }
+
+            } return null;
+        }
+        return null;
+    }
+
+    // arg_list --> expr arg_list2
+    private Arg_list arg_list() {
+        Token t = tokens.peek();
+        if (t != null ) {
+            Expr expr = expr();
+            Arg_list2 arg_list2 = arg_list2();
+            return new Arg_list(expr,arg_list2);
+        }
+        return null;
+    }
+
+    // arg_list2 --> , expr arg_list2 | E
+    private Arg_list2 arg_list2() {
+        Token t = tokens.peek();
+        if(t!= null) {
+            if(t.getValue().equals(",")) {
+                tokens.poll();
+                Expr expr = expr();
+                Arg_list2 arg_list2 = arg_list2();
+                return new Arg_list2(t,expr,arg_list2);
+            }
+            return null;
+        }
+        return null;
+    }
+
+    // args --> arg_list | E
+    private Args args() {
+        Token t = tokens.peek();
+        if (t!= null) {
+            Arg_list arg_list = arg_list();
+            return new Args(arg_list);
+        }
+        return null;
+    }
+
 
 
     public static void main(String[] args) throws FileNotFoundException, Exception {
