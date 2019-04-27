@@ -12,7 +12,7 @@ public class Parser {
     public Parser(String fileName) throws FileNotFoundException, Exception {
         // TODO Auto-generated constructor stub
         String sourceCode = Load.loadRaw(fileName);
-        Queue<Token> tokens = Token.tokenize(sourceCode);
+        this.tokens = Token.tokenize(sourceCode);
     }
 
     private Program parse(){
@@ -226,6 +226,18 @@ public class Parser {
         else{
             Expr_stmt expr_stmt = expr_stmt();
             return new Stmt(expr_stmt);
+        }
+        return null;
+    }
+
+    // break_stmt --> break
+    private Break_stmt break_stmt(){
+        Token t = tokens.peek();
+        if (t != null){
+            if (t.getValue().equals("break")){
+                tokens.poll();
+                return new Break_stmt(t);
+            }
         }
         return null;
     }
