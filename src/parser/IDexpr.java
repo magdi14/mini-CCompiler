@@ -10,7 +10,6 @@ public class IDexpr implements Node {
     IDexpr idexpr;
     IDexpr2 idexpr2;
     Expr expr;
-    Args args;
     Type_spec type_spec;
 
     public IDexpr(Token t1) {
