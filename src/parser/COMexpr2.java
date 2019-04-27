@@ -19,7 +19,7 @@ public class COMexpr2 implements Node {
         if(t1 != null){
             System.out.println(t1.getValue());
             System.out.println(" ASexpr = ");
-            ASexpr.printNode();
+            asxpr.printNode();
         }else
             System.out.println("null");
     }

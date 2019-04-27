@@ -16,7 +16,7 @@ public class COMexpr implements Node {
         System.out.println("----------COMexpr--------------");
         if (asexpr != null){
             System.out.println(" ASexpr = ");
-            ASexpr.printNode();
+            asexpr.printNode();
             if (comexpr2 != null){
                 System.out.println(" COMexpr2 = ");
                 comexpr2.printNode();
