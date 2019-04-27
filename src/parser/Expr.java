@@ -2,17 +2,17 @@ package parser;
 
 import Lexical.Token;
 
-public class EXPR implements Node {
+public class Expr implements Node {
     Token t1;
-    EXPR2 expr2;
+    Expr2 expr2;
     ORexpr oRexpr;
 
-    public EXPR(Token t1, EXPR2 expr2) {
+    public Expr(Token t1, Expr2 expr2) {
         this.t1 = t1;
         this.expr2 = expr2;
     }
 
-    public EXPR(ORexpr oRexpr) {
+    public Expr(ORexpr oRexpr) {
         this.oRexpr = oRexpr;
     }
 
@@ -21,7 +21,7 @@ public class EXPR implements Node {
         if(t1 != null)
         {
             System.out.println(t1.getValue());
-            System.out.println(" EXPR2 = ");
+            System.out.println(" Expr2 = ");
             expr2.printNode();
         }
         else

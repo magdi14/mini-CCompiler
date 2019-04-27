@@ -2,7 +2,7 @@ package parser;
 
 import Lexical.Token;
 
-public class EXPR2 implements Node {
+public class Expr2 implements Node {
 
     Token t1;
     Token t2;
@@ -10,12 +10,12 @@ public class EXPR2 implements Node {
     ORexpr oRexpr1;
     ORexpr oRexpr2;
 
-    public EXPR2(Token t1, ORexpr oRexpr1) {
+    public Expr2(Token t1, ORexpr oRexpr1) {
         this.t1 = t1;
         this.oRexpr1 = oRexpr1;
     }
 
-    public EXPR2(Token t1, Token t2, Token t3, ORexpr oRexpr1, ORexpr oRexpr2) {
+    public Expr2(Token t1, Token t2, Token t3, ORexpr oRexpr1, ORexpr oRexpr2) {
         this.t1 = t1;
         this.t2 = t2;
         this.t3 = t3;
