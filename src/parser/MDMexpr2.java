@@ -24,6 +24,7 @@ public class MDMexpr2 implements Node {
             idexpr.printNode();
             System.out.println(" MDMexpr2 = ");
             mdmexpr2.printNode();
-        }
+        }else
+            System.out.println("null");
     }
 }
