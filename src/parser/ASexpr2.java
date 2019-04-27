@@ -25,8 +25,9 @@ public class ASexpr2 implements Node {
             System.out.println(" MDMexpr = ");
             mdmexpr.printNode();
             System.out.println(" ASexpr2 = ");
-            ASexpr2.printNode();
-
+            asexpr2.printNode();
         }
+        else
+            System.out.println("NULL");
     }
 }
