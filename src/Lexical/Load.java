@@ -20,7 +20,7 @@ public class Load {
 
     public static ArrayList<Map.Entry> loadClasses() throws FileNotFoundException {
         ArrayList<Map.Entry> regexDictionary = new ArrayList<>();
-        File inputFile = new File("/home/shehabeldeen/materials/compilers/mini-CCompiler/src/Lexical/dictionary.csv");
+        File inputFile = new File("/home/ref/IdeaProjects/mini-CCompiler/src/Lexical/dictionary.csv");
         Scanner scan = new Scanner(inputFile);
         while (scan.hasNext()) {
             String[] line = scan.nextLine().split(" ");

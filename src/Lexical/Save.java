@@ -7,7 +7,7 @@ import java.util.Queue;
 
 class Save {
     static void saveTokens(Queue<Token> tokens) throws Exception {
-        PrintWriter printWriter = new PrintWriter(new File("/home/shehabeldeen/materials/compilers/mini-CCompiler/main.tokens"));
+        PrintWriter printWriter = new PrintWriter(new File("/home/ref/IdeaProjects/mini-CCompiler/main.tokens"));
         for (var token : tokens) {
             printWriter.write(token.toString());
         }
