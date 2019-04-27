@@ -4,6 +4,10 @@ public class Args implements Node {
 
     Arg_list arg_list;
 
+    public Args(Arg_list arg_list) {
+        this.arg_list = arg_list;
+    }
+
     @Override
     public void printNode() {
         // TODO Auto-generated method stub
